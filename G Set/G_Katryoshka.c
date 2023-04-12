@@ -2,15 +2,14 @@
 #include<stdio.h>
 int main()
 {
-    long long int e, m, b, total = 0;
+    long long int e, m, b, total;
     scanf("%lld %lld %lld", &e, &m, &b);
 
-    if(m < b && m < e)
-        total = m;
-    else if(b < e)
-        total = b;
-    else 
+    total = m;
+    if(e < total)
         total = e;
+    if(b < total)
+        total = b; 
     m -= total; b -= total; e -= total;
 
     e /= 2;
