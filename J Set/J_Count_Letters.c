@@ -1,8 +1,8 @@
 // Q: https://codeforces.com/group/MWSDmqGsZm/contest/219856/problem/J
 #include<stdio.h>
 #include<string.h>
-char s[10000001];   // the array size is big so it declared globally
-int count[26];
+char s[10000001];   // the array size is big so it declared globally, it
+int count[26];      // can also done by using EOF inside main function
 int main()
 { 
     scanf("%s", s);
