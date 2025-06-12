@@ -41,38 +41,35 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+	int n, m; cin >> n >> m;
+	vll x(n), r(n);
+	for(auto &a: x) cin >> a;
+	for(auto &a: r) cin >> a;
 
-    if(s[n-1] != '1')
-    {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
-    }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+	map<ll, ll> mp;
+	for(int i = 0; i < n; i++)
+	{
+		for(ll j = x[i]-r[i]; j <= x[i]+r[i]; j++)
+		{
+			ll low = 0, high = r[i], mxY;
+			while(low <= high)
+			{
+				ll mid = low+(high-low)/2ll;
+
+				ll left = (x[i]-j)*(x[i]-j)+mid*mid;
+				if(left <= r[i]*r[i])
+				{
+					mxY = mid;
+					low = mid+1;
+				}
+				else high = mid-1;
+			}
+			mp[j] = max(mxY, mp[j]);
+		}
+	}
+	ll ans = 0;
+	for(auto &x: mp) ans += (2ll*x.se+1ll);
+	cout << ans << "\n";
 }
 
 int main()

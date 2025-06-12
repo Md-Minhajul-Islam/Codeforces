@@ -42,37 +42,38 @@ int test_case;
 void solve()
 {
     int n, k; cin >> n >> k;
-    string s; cin >> s;
+    vll a(n), b(n+1);
+    for(auto &x: a) cin >> x;
+    for(int i = 0; i < n; i++)
+    {
+    	ll x; cin >> x;
+    	b[a[i]] = x;
+    }
 
-    if(s[n-1] != '1')
-    {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
-    }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+    ll sum = 0;
+    vll ans(n+1);
+	priority_queue<ll, vll, greater<ll> >pq;
+	for(int i = 1; i <= n; i++)
+	{
+		if(!pq.empty())
+		{
+			if(pq.size() <= k)
+			{
+				ans[i] = sum;
+			}
+			else{
+				sum -= pq.top();
+				pq.pop();
+				ans[i] = sum;
+			}
+		}
+		pq.push(b[i]);
+		sum += b[i];
+	} 
+	for(int i = 0; i < n; i++)
+	{
+		cout << ans[a[i]] <<" \n"[i+1==n];
+	}
 }
 
 int main()

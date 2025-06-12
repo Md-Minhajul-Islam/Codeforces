@@ -39,40 +39,17 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 
 int test_case;
 
+
 void solve()
 {
-    int n, k; cin >> n >> k;
     string s; cin >> s;
-
-    if(s[n-1] != '1')
-    {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
-    }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+  
+    int n = s.size();
+    
+    cout << "3\n";
+    cout << "R " << n-1 << "\n";
+    cout << "L " << n << "\n";
+    cout << "L 2\n";
 }
 
 int main()
@@ -85,10 +62,10 @@ int main()
     freopen("Error.txt", "w", stderr);
     #endif
 
-    int t_case; cin >> t_case;
-    for(test_case = 1; test_case <= t_case; test_case++)
-    {
+    // int t_case; cin >> t_case;
+    // for(test_case = 1; test_case <= t_case; test_case++)
+    // {
         solve();
-    }
+    // }
     return 0;
 }

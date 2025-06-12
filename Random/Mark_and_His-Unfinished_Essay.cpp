@@ -41,38 +41,35 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+    int n, c, q; cin >> n >> c >> q;
 
-    if(s[n-1] != '1')
+    string s; cin >> s;
+    s = "#"+s;
+
+    vector<pll> v(c+1), ranges(c+1);
+
+    v[0] = {1, n};
+    ranges[0] = {1, n};
+
+    for(int i = 1; i <= c; i++)
     {
-    	for(int i = n-2; i >= 0; i--)
+    	ll l, r; cin >> l >> r;
+    	v[i] = {l, r};
+    	ranges[i] = {ranges[i-1].se+1ll, ranges[i-1].se+1ll+r-l};
+    }
+    
+    while(q--)
+    {
+    	ll k; cin >> k;
+    	for(int i = c; i >= 0; i--)
     	{
-    		if(s[i] == '1' && n-1-i <= k)
+    		if(ranges[i].fi <= k)
     		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
+    			k = v[i].fi+k-ranges[i].fi;
     		}
     	}
+    	cout << s[k] << "\n";
     }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
 }
 
 int main()

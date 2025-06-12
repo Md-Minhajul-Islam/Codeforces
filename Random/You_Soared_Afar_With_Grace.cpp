@@ -41,38 +41,55 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+    int n; cin >> n;
+    vii a(n+1), b(n+1);
+    vii ind_a(n+1), ind_b(n+1);
+    for(int i = 1; i <= n; i++) cin >> a[i], ind_a[a[i]] = i;
+    for(int i = 1; i <= n; i++) cin >> b[i], ind_b[b[i]] = i;
 
-    if(s[n-1] != '1')
-    {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
-    }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+    map<pii, int> m;
+	for(int i = 1; i <= n; i++)
+		m[{min(a[i],b[i]), max(a[i], b[i])}]++;
+
+	int cnt1 = 0, cnt2 = 0, mid = -1;
+	for(auto &x: m)
+	{
+		if(x.se == 1) mid = x.fi.fi;
+		cnt1 += x.se == 1;
+		cnt2 += x.se == 2;
+	}
+	if(cnt1 > 1) {
+		cout << "-1\n"; 
+		return;
+	}
+	vector<pii> ans;
+	if(cnt1 == 1)
+	{
+		int i = ind_a[mid], j = (n+1)/2;
+		if(i != j)
+		{
+			ans.pb({i, j});
+			swap(ind_a[a[i]], ind_a[a[j]]);
+			swap(a[i], a[j]);
+			swap(ind_b[b[i]], ind_b[b[j]]);
+			swap(b[i], b[j]);
+		}
+	}
+	for(int k = 1; k <= n; k++)
+	{
+		int i = ind_b[a[k]];
+		int j = n-k+1;
+		if(i != j)
+		{
+			ans.pb({i, j});
+			swap(ind_a[a[i]], ind_a[a[j]]);
+			swap(a[i], a[j]);
+			swap(ind_b[b[i]], ind_b[b[j]]);
+			swap(b[i], b[j]);
+		}
+	}
+	cout << ans.size() << "\n";
+	for(auto &x: ans) cout << x.fi << " " << x.se << "\n";
 }
 
 int main()

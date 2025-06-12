@@ -41,38 +41,43 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+    int n; cin >> n;
 
-    if(s[n-1] != '1')
+    int i = (n+1)/2, j = i;
+    int ans[n+1][n+1];
+    ans[i][j] = 0;
+    int step = 1, num = 1;
+    while(step <= n)
     {
-    	for(int i = n-2; i >= 0; i--)
+    	for(int ind = 1; ind <= step; ind++)
     	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
+    		++j;
+    		if(i <= n && j <= n && i >= 1 && j >= 1) ans[i][j] = num++;
     	}
-    }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
+    	for(int ind = 1; ind <= step; ind++)
     	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
+    		i++;
+    		if(i <= n && j <= n && i >= 1 && j >= 1) ans[i][j] = num++;
     	}
+    	step++;
+    	for(int ind = 1; ind <= step; ind++)
+    	{
+    		--j;
+    		if(i <= n && j <= n && i >= 1 && j >= 1) ans[i][j] = num++;
+    	}
+    	for(int ind = 1; ind <= step; ind++)
+    	{
+    		--i;
+    		if(i <= n && j <= n && i >= 1 && j >= 1) ans[i][j] = num++;
+    	}
+    	step++;
     }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
+    for(int i = 1; i <= n; i++)
     {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
+    	for(int j = 1; j <= n; j++)
+    		cout << ans[i][j] << " \n"[j==n];
     }
-    cout << sum << "\n";
+
 }
 
 int main()

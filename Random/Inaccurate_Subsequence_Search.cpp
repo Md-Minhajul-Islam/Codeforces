@@ -37,42 +37,53 @@ template <class T> void _print(set <T> v) {cerr << "[ "; for (T i : v) {_print(i
 template <class T> void _print(multiset <T> v) {cerr << "[ "; for (T i : v) {_print(i); cerr << " ";} cerr << "]";}
 template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i : v) {_print(i); cerr << " ";} cerr << "]";}
 
-int test_case;
+int test_case;   
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+    int n, m, k; cin >>  n >> m >> k;
+    vii a(n), b(m);
+    map<int, int> mp1, mp2, mp3;
+    for(auto &x: a) cin >> x;
+    for(auto &x: b){
+    	cin >> x;
+    	mp1[x]++;
+    	mp2[x]++;
+    }
+    sort(b.begin(), b.end());
+	int ans = 0, cnt = 0;
+	for(int i = 0; i < m; i++)
+	{
+		auto it = lower_bound(b.begin(), b.end(), a[i]);
+		if(it != b.end() && *it == a[i] && mp1[a[i]] > 0) 
+		{
+			cnt++;
+			mp1[a[i]]--;
+		}
+		mp3[a[i]]++;
+	}
+	// cout << cnt << "\n";
+	if(cnt >= k) ans++;
 
-    if(s[n-1] != '1')
-    {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
-    }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+	for(int i = m; i < n; i++)
+	{
+		auto it = lower_bound(b.begin(), b.end(), a[i-m]);
+		if(it != b.end() && *it == a[i-m] && mp3[a[i-m]] <= mp2[a[i-m]])
+		{
+			mp1[a[i-m]]++; cnt--;
+		}
+		mp3[a[i-m]]--;
+		it = lower_bound(b.begin(), b.end(), a[i]);
+		if(it != b.end() && *it == a[i] && mp1[a[i]] > 0)
+		{
+			mp1[a[i]]--;
+			cnt++;
+		}
+		mp3[a[i]]++;
+		if(cnt >= k) ans++;
+		// cout << cnt << "\n";
+	}
+	cout << ans << "\n";
 }
 
 int main()

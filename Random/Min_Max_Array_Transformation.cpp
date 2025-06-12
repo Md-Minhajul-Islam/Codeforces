@@ -41,38 +41,26 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+    int n; cin >> n;
+    vii a(n), b(n);
+    for(auto &x: a) cin >> x;
+    for(auto &x: b) cin >> x;
 
-    if(s[n-1] != '1')
-    {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
-    }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+    vii for_mn(n);
+	for(int i = 0; i < n; i++)
+	{
+		for_mn[i] = *lower_bound(b.begin(), b.end(), a[i])-a[i];
+	}
+	vii c(n); c[n-1] = b[n-1];
+	for(int i = n-2; i >= 0; i--)
+	{
+		if(b[i] >= a[i+1]) c[i] = c[i+1];
+		else c[i] = b[i];
+	}
+	for(auto x: for_mn) cout << x << " ";
+		cout << "\n";
+	for(int i = 0; i < n; i++) cout << c[i]-a[i] << " ";
+		cout << "\n";
 }
 
 int main()

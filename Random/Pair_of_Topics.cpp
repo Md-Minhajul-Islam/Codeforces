@@ -41,38 +41,29 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+    int n; cin >> n;
+    vii a(n), b(n);
+    for(auto &x: a) cin >> x;
+    for(auto &x: b) cin >> x;
+    vii pos, neg;
+	ll cnt_0 = 0, m = 0;
+	for(int i = 0; i < n; i++)
+	{
+		m += (a[i]-b[i] > 0);
+		cnt_0 += (a[i]-b[i] == 0);
 
-    if(s[n-1] != '1')
-    {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
-    }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+		if(a[i]-b[i] >= 0) pos.pb(a[i]-b[i]);
+		else neg.pb(a[i]-b[i]);
+	}
+	sort(pos.begin(), pos.end());
+	ll ans = m*(m-1ll)/2ll;
+	ans += cnt_0*1ll*m;
+
+	for(int i = 0; i < neg.size(); i++)
+	{
+		ans += pos.end()-upper_bound(pos.begin(), pos.end(), -1ll*neg[i]);
+	}
+	cout << ans << "\n";
 }
 
 int main()
@@ -85,10 +76,10 @@ int main()
     freopen("Error.txt", "w", stderr);
     #endif
 
-    int t_case; cin >> t_case;
-    for(test_case = 1; test_case <= t_case; test_case++)
-    {
+    // int t_case; cin >> t_case;
+    // for(test_case = 1; test_case <= t_case; test_case++)
+    // {
         solve();
-    }
+    // }
     return 0;
 }

@@ -41,24 +41,24 @@ int test_case;
 
 void solve()
 {
-    int n; cin >> n;
-    vii v(n);
-    for(auto &x: v) cin >> x;
-    int zero = 0, k = v[0];
-	for(int i = 0; i < n; i++)
-	{
-		int cnt = 0;
-		for(int j = 0; j < 30; j++)
-		{
-			if((v[i]&(1<<j)) == 0) cnt++;
-			else break;
-		}
-		if(zero < cnt) zero = cnt, k = v[i];
-	}
-	ll sum = 0;
-    for(int i = 0; i < n; i++)
-    	sum += 0ll+(v[i]^k);
-    cout << sum << "\n";
+    ll n; cin >> n;
+    
+    if(n == 1) cout << "FastestFinger\n";
+    else if(n == 2 || n%2) cout << "Ashishgup\n";
+    else{
+    	vii div;
+    	for(ll i = 2; i*i <= n; i++)
+    	{
+    		if(n%i == 0)
+    		{
+    			if(i%2) div.pb(i);
+    			if((n/i)%2) div.pb(n/i);
+    		}
+    	}
+    	if(div.empty()) cout << "FastestFinger\n";
+    	else if(div.size() == 1 && div[0]*2 == n) cout << "FastestFinger\n";
+    	else cout << "Ashishgup\n";
+    }
 }
 
 int main()

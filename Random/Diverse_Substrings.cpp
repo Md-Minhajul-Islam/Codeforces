@@ -41,38 +41,23 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
+    int n; cin >> n;
     string s; cin >> s;
 
-    if(s[n-1] != '1')
+    ll ans = 0;
+    for(int i = 0; i < n; i++)
     {
-    	for(int i = n-2; i >= 0; i--)
+    	vii cnt(10); int unique = 0, mxCnt = 0;
+    	for(int j = i; j >= max(0, i-100); j--)
     	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
+    		unique += (cnt[s[j]-'0'] == 0);
+    		cnt[s[j]-'0']++;
+    		mxCnt = max(mxCnt, cnt[s[j]-'0']);
+
+    		if(mxCnt <= unique) ans++;
     	}
     }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+    cout << ans << "\n";
 }
 
 int main()

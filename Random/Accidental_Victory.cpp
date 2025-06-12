@@ -41,38 +41,37 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
-
-    if(s[n-1] != '1')
+    int n; cin >> n;
+    map<ll, ll> m;
+    vll a(n), b;
+    for(int i = 0; i < n; i++)
     {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
+    	cin >> a[i];
+    	m[a[i]] += a[i];
+    	if(m[a[i]] == a[i]) b.pb(a[i]);
     }
-    if(s[0] != '1')
+    sort(b.begin(), b.end());
+    vll pref(b.size());
+    pref[0] = m[b[0]];
+    for(int i = 1; i < b.size(); i++)
     {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
+    	pref[i] = pref[i-1]+m[b[i]];
     }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
+    set<int> s;
+    s.insert(b[b.size()-1]);
+    for(int i = b.size()-2; i >= 0; i--)
     {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
+    	if(pref[i] >= b[i+1]) s.insert(b[i]);
+    	else break;
     }
-    cout << sum << "\n";
+    vii ans;
+    for(int i = 0; i < n; i++)
+    {
+    	if(s.find(a[i]) != s.end()) ans.pb(i+1);
+    }
+    cout << ans.size() <<"\n";
+    for(auto &x: ans) cout << x <<" ";
+    	cout << "\n";
 }
 
 int main()

@@ -39,40 +39,24 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 
 int test_case;
 
+
+
 void solve()
 {
-    int n, k; cin >> n >> k;
     string s; cin >> s;
-
-    if(s[n-1] != '1')
+    int num = stoi(s);
+    for(int i = 0; i <= 100; i++)
     {
-    	for(int i = n-2; i >= 0; i--)
+    	for(int j = i; j <= 100; j++)
     	{
-    		if(s[i] == '1' && n-1-i <= k)
+    		if((i+j)*(i+j) == num)
     		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
+    			cout << i << " " << j << "\n";
+    			return;
     		}
     	}
     }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+    cout << "-1\n";
 }
 
 int main()

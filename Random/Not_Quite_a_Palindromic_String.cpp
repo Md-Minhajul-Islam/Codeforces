@@ -43,36 +43,21 @@ void solve()
 {
     int n, k; cin >> n >> k;
     string s; cin >> s;
-
-    if(s[n-1] != '1')
+    int cnt0 = 0, cnt1 = 0;
+    for(int i = 0; i < n; i++)
     {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
+    	cnt0 += (s[i] == '0');
+    	cnt1 += (s[i] == '1');
     }
-    if(s[0] != '1')
+    int rem = (n-2*k)/2;
+    if(cnt0 < rem || cnt1 < rem)
     {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
+    	no;
+    	return;
     }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+    cnt0 -= rem; cnt1 -= rem;
+    if(cnt0%2 || cnt1%2) no;
+    else yes;
 }
 
 int main()

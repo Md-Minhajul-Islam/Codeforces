@@ -41,38 +41,42 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
-
-    if(s[n-1] != '1')
+    int n; cin >> n;
+    priority_queue<int> a, b;
+    for(int i = 0; i < n; i++)
     {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
+        int x; cin >> x;
+        a.push(x);
     }
-    if(s[0] != '1')
+    for(int i = 0; i < n; i++)
     {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
+        int x; cin >> x;
+        b.push(x);
     }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
+    int ans = 0;
+    while(!a.empty())
     {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
+        if(a.top() == b.top())
+        {
+            a.pop();
+            b.pop();
+        }
+        else
+        {
+            ans++;
+            if(a.top() > b.top())
+            {
+                a.push(to_string(a.top()).size());
+                a.pop();
+            }
+            else
+            {
+                b.push(to_string(b.top()).size());
+                b.pop();
+            }
+        }
     }
-    cout << sum << "\n";
+    cout << ans << "\n";
 }
 
 int main()

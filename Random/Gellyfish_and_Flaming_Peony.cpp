@@ -41,38 +41,36 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+    int n; cin >> n;
+    vii a(n);
+    int gcd = 0;
+    for(auto &x: a) cin >> x, gcd = __gcd(x, gcd);
 
-    if(s[n-1] != '1')
-    {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
+    int cnt = 0;
+    for(auto &x: a) cnt += x == gcd;
+
+    if(cnt){
+        cout << n-cnt << "\n";
+        return;
     }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
+
+    queue<int> q;
+    vii dp(5005, INT_MAX);
+    for(auto &x: a){
+        dp[x] = 0;
+        q.push(x);
     }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
+    while(!q.empty()){
+        int el = q.front();
+        q.pop();
+        for(auto &x: a){
+            if(dp[__gcd(x, el)] == INT_MAX){
+                dp[__gcd(x, el)] = dp[el]+1;
+                q.push(__gcd(x, el));
+            }
+        }
     }
-    cout << sum << "\n";
+    cout  <<  n-1+dp[gcd] << "\n";
 }
 
 int main()

@@ -39,40 +39,68 @@ template <class T, class V> void _print(map <T, V> v) {cerr << "[ "; for (auto i
 
 int test_case;
 
+vll power(100005);
+ll mod = 998244353ll;
+
+void precal()
+{
+	ll x = 1ll;
+	power[0] = x;
+	for(int i = 1; i <= 100000; i++)
+	{
+		x *= 2ll;
+		x %= mod;
+		power[i] = x;
+	}
+}
+
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+    int n; cin >> n;
+    vii p(n), q(n);
+    for(auto &x: p) cin >> x;
+    for(auto &x: q) cin >> x;
 
-    if(s[n-1] != '1')
-    {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
-    }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+    vii prefmx1(n), prefmx2(n);
+	prefmx1[0] = 0, prefmx2[0] = 0;
+	int mx1 = p[0], mx2 = q[0];
+	for(int i = 1; i < n; i++)
+	{
+
+		prefmx1[i] = prefmx1[i-1];
+		prefmx2[i] = prefmx2[i-1];
+
+		if(p[i] > mx1){
+			mx1 = p[i];
+			prefmx1[i] = i;
+		}
+
+		if(q[i] > mx2){
+			mx2 = q[i];
+			prefmx2[i] = i;
+		}
+	}
+	vll r(n);
+	for(int i = 0; i < n; i++)
+	{
+
+		if(p[prefmx1[i]] > q[prefmx2[i]]){
+			r[i] = (power[p[prefmx1[i]]]+power[q[i- prefmx1[i]]])%mod;
+		}
+		else if(p[prefmx1[i]] < q[prefmx2[i]]){
+			r[i] = (power[p[i- prefmx2[i]]]+power[q[prefmx2[i]]])%mod;
+		}
+		else{
+			if(q[i- prefmx1[i]] > p[i - prefmx2[i]]){
+				r[i] = (power[p[prefmx1[i]]]+power[q[i- prefmx1[i]]])%mod;
+			}
+			else{
+				r[i] = (power[p[i- prefmx2[i]]]+power[q[prefmx2[i]]])%mod;
+			}
+		}
+
+	}
+	for(int i = 0; i < n; i++) cout << r[i] << " \n"[i+1==n];
 }
 
 int main()
@@ -84,6 +112,8 @@ int main()
     #ifndef ONLINE_JUDGE
     freopen("Error.txt", "w", stderr);
     #endif
+
+    precal();
 
     int t_case; cin >> t_case;
     for(test_case = 1; test_case <= t_case; test_case++)

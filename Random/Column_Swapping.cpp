@@ -41,38 +41,42 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
-
-    if(s[n-1] != '1')
+    int n, m; cin >> n >> m;
+    int a[n][m], b[n][m];
+    for(int i = 0; i < n; i++)
     {
-    	for(int i = n-2; i >= 0; i--)
+    	for(int j = 0; j < m; j++)
     	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
+    		cin >> a[i][j];
+    		b[i][j] = a[i][j];
+    	}
+    	sort(b[i], b[i]+m);
+    }
+    vii ind;
+    for(int i = 0; i < n; i++)
+    {
+    	for(int j = 0; j < m; j++)
+    	{
+    		if(a[i][j] != b[i][j]) ind.pb(j);
     	}
     }
-    if(s[0] != '1')
+    if(ind.size() >= 2)
     {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
+    	for(int i = 0; i < n; i++) swap(a[i][ind[0]], a[i][ind[1]]);
     }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+	for(int i = 0; i < n; i++)
+	{
+		for(int j = 0; j < m; j++)
+		{
+			if(a[i][j] != b[i][j])
+			{
+				cout << "-1\n";
+				return;
+			}
+		}
+	}
+	if(ind.empty()) cout << "1 1\n";
+	else cout << ind[0]+1 << " " << ind[1]+1 << "\n";
 }
 
 int main()

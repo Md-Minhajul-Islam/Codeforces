@@ -41,38 +41,20 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
-
-    if(s[n-1] != '1')
+    int n; cin >> n;
+    vii a(n);
+    int cnt_0 = 0, cnt_1 = 0, cnt_2 = 0;
+    for(int i = 0; i < n; i++)
     {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
+    	int x; cin >> x;
+    	cnt_0 += (x%3 == 0);
+    	cnt_1 += (x%3 == 1);
+    	cnt_2 += (x%3 == 2);
     }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+    if(cnt_0) yes;
+    else if((cnt_1 >= 2 && cnt_2 >= 2) || (cnt_1 >= 1 && cnt_2 >= 1)) yes;
+    else if(cnt_2 >= 3 || cnt_1 >= 3) yes;
+    else no;
 }
 
 int main()

@@ -41,38 +41,46 @@ int test_case;
 
 void solve()
 {
-    int n, k; cin >> n >> k;
-    string s; cin >> s;
+    int n, q; cin >> n >> q;
 
-    if(s[n-1] != '1')
+    vii a(n), ind(n+2);
+    for(int i = 0; i < n; i++)
     {
-    	for(int i = n-2; i >= 0; i--)
-    	{
-    		if(s[i] == '1' && n-1-i <= k)
-    		{
-    			k -= n-1-i;
-    			swap(s[i], s[n-1]);
-    			break;
-    		}
-    	}
+    	cin >> a[i];
+    	ind[a[i]] = i;
     }
-    if(s[0] != '1')
-    {
-    	for(int i = 1; i < n-1; i++)
-    	{
-    		if(s[i] == '1' && i <= k)
-    		{
-    			swap(s[0], s[i]);
-    			break;
-    		}
-    	}
-    }
-    int sum = 0;
-    for(int i = 0; i < n-1; i++)
-    {
-    	sum += (s[i]-'0')*10+(s[i+1]-'0');
-    }
-    cout << sum << "\n";
+
+    vii pref_max(n), suff_nearest_max(n);
+	pref_max[0] = a[0];
+
+	for(int i = 1; i < n; i++) pref_max[i] = max(a[i], pref_max[i-1]);
+	stack<int> s;
+	for(int i = n-1; i >= 0; i--)
+	{
+		while(!s.empty() && s.top() < a[i]) s.pop();
+
+		if(!s.empty()) suff_nearest_max[i] = s.top();
+		else suff_nearest_max[i] = a[i];
+		s.push(a[i]);
+	}
+
+	while(q--)
+	{
+		int pos, k; cin >> pos >> k;
+		pos--;
+		if(pref_max[pos] != a[pos] || pos > k)
+		{
+			cout << "0\n";
+			continue;
+		}
+		int ans = 0;
+		if(pos != 0){
+			 ans++; k -= pos;
+		}
+		if(suff_nearest_max[pos] == a[pos]) ans += k;
+		else ans += min(k, ind[suff_nearest_max[pos]]-pos-1);
+		cout << ans << "\n";
+	}
 }
 
 int main()
